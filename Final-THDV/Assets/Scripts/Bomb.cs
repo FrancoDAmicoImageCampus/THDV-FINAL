@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    public float explosionRadius = 5f;  // Radio de la explosión
+    
     public float explosionForce = 700f; // Fuerza de la explosión
-    public int damage = 20;             // Daño de la explosión
+    public PlayerDataSO playerData;         // Daño de la explosión
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +37,7 @@ public class Bomb : MonoBehaviour
     void Explode()
     {
         // Obtener todos los colliders dentro del radio de la explosión
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, playerData.explosionRadius);
 
         // Iterar a través de todos los objetos que están dentro del radio
         foreach (Collider hitCollider in hitColliders)
@@ -53,7 +53,7 @@ public class Bomb : MonoBehaviour
                 if (rb != null)
                 {
                     // Aplicamos una fuerza de explosión hacia afuera desde el centro
-                    rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+                    rb.AddExplosionForce(explosionForce, transform.position, playerData.explosionRadius);
                 }
             }
 
@@ -64,7 +64,7 @@ public class Bomb : MonoBehaviour
                 if (player != null)
                 {
                     // Llamamos a la función para que el jugador reciba daño
-                    player.RecibirDanio(damage);
+                    player.RecibirDanio(playerData.damage);
                 }
             }
         }

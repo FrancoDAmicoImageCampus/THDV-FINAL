@@ -1,39 +1,31 @@
 ﻿using UnityEngine;
 
-public class FirstPersonLook : MonoBehaviour
+public class CameraControl : MonoBehaviour
 {
-    [SerializeField]
-    Transform character;
-    public float sensitivity = 2;
-    public float smoothing = 1.5f;
+    public Transform player;  // El jugador o el objeto al que la cámara sigue
+    public float distance = 5f;  // Distancia a la que la cámara se encuentra del jugador
+    public float height = 2f;  // Altura de la cámara con respecto al jugador
+    public float rotationSpeed = 5f;  // Velocidad de rotación de la cámara
 
-    Vector2 velocity;
-    Vector2 frameVelocity;
-
-
-    void Reset()
-    {
-        // Get the character from the FirstPersonMovement in parents.
-        character = GetComponentInParent<FirstPersonMovement>().transform;
-    }
+    private Vector3 offset;  // Desplazamiento relativo entre la cámara y el jugador
 
     void Start()
     {
-        // Lock the mouse cursor to the game screen.
-        Cursor.lockState = CursorLockMode.Locked;
+        // Calculamos el desplazamiento inicial de la cámara
+        offset = new Vector3(0, height, -distance);
     }
 
-    void Update()
+    void LateUpdate()
     {
-        // Get smooth velocity.
-        Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-        Vector2 rawFrameVelocity = Vector2.Scale(mouseDelta, Vector2.one * sensitivity);
-        frameVelocity = Vector2.Lerp(frameVelocity, rawFrameVelocity, 1 / smoothing);
-        velocity += frameVelocity;
-        velocity.y = Mathf.Clamp(velocity.y, -90, 90);
+        // Obtener la rotación del jugador en Y (para mantener el ángulo en X fijo)
+        float horizontalInput = Input.GetAxis("Horizontal");
+        transform.RotateAround(player.position, Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
 
-        // Rotate camera up-down and controller left-right from velocity.
-        transform.localRotation = Quaternion.AngleAxis(-velocity.y, Vector3.right);
-        character.localRotation = Quaternion.AngleAxis(velocity.x, Vector3.up);
+        // Fijar el ángulo en el eje X de la cámara
+        Vector3 desiredPosition = player.position + offset;  // Obtener la posición deseada
+        transform.position = desiredPosition;  // Establecer la posición de la cámara
+
+        // Mirar al jugador con la cámara, manteniendo la rotación en X
+        transform.LookAt(player.position);
     }
 }

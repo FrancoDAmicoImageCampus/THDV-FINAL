@@ -15,12 +15,13 @@ public class FirstPersonMovement : MonoBehaviour
     /// <summary> Functions to override movement speed. Will use the last added override. </summary>
     public List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
 
-
-
     void Awake()
     {
         // Get the rigidbody on this.
         rigidbody = GetComponent<Rigidbody>();
+
+        // Lock the rotation on all axes to prevent the object from rotating
+        rigidbody.freezeRotation = true;
     }
 
     void FixedUpdate()
@@ -36,9 +37,9 @@ public class FirstPersonMovement : MonoBehaviour
         }
 
         // Get targetVelocity from input.
-        Vector2 targetVelocity =new Vector2( Input.GetAxis("Horizontal") * targetMovingSpeed, Input.GetAxis("Vertical") * targetMovingSpeed);
+        Vector2 targetVelocity = new Vector2(Input.GetAxis("Horizontal") * targetMovingSpeed, Input.GetAxis("Vertical") * targetMovingSpeed);
 
-        // Apply movement.
-        rigidbody.velocity = transform.rotation * new Vector3(targetVelocity.x, rigidbody.velocity.y, targetVelocity.y);
+        // Apply movement, but prevent the rotation of the object from changing
+        rigidbody.velocity = new Vector3(targetVelocity.x, rigidbody.velocity.y, targetVelocity.y);
     }
 }

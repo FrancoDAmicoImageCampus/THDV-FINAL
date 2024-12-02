@@ -37,8 +37,8 @@ public class Pausa : MonoBehaviour
     // Update se llama una vez por frame
     void Update()
     {
-        // Detectar si el jugador presiona la tecla "V"
-        if (Input.GetKeyDown(KeyCode.V))
+        // Detectar si el jugador presiona la tecla "Escape" para pausar o reanudar el juego
+        if (Input.GetKeyDown(KeyCode.Escape))  // Cambiar de "V" a "Escape"
         {
             if (juegoPausado)
             {

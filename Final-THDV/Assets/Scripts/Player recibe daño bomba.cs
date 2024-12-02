@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro; // Necesario para trabajar con TextMeshPro
+using UnityEngine.SceneManagement;  // Necesario para cargar o reiniciar la escena
 
 public class Player : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class Player : MonoBehaviour
     public TextMeshProUGUI healthText;  // Referencia al componente TextMeshProUGUI
     public float jumpForce = 5f;  // Fuerza del salto del jugador
     private Rigidbody rb;  // Componente Rigidbody del jugador para aplicar la física del salto
+
+    public int maxHealth = 100;  // Salud máxima del jugador
+    public float healthRegenerationRate = 10f;  // Tasa de regeneración de salud por segundo
 
     // Método para recibir daño
     public void RecibirDanio(int cantidadDeDanio)
@@ -31,7 +35,9 @@ public class Player : MonoBehaviour
     private void Muerte()
     {
         Debug.Log("El jugador ha muerto");
-        // Aquí puedes agregar la lógica para la muerte, como reiniciar el nivel o mostrar una pantalla de Game Over
+
+        // Reinicia la escena actual
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);  // Recarga la escena actual
     }
 
     // Método para actualizar el texto que muestra la salud
@@ -70,9 +76,30 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Método que maneja la regeneración de salud
+    private void RegenerarSalud()
+    {
+        if (health < maxHealth)  // Si la salud no ha alcanzado el máximo
+        {
+            // Regenera salud según la tasa de regeneración
+            health += (int)(healthRegenerationRate * Time.deltaTime);  // Calcula la cantidad de salud a regenerar por segundo
+            if (health > maxHealth)  // Asegura que no supere la salud máxima
+            {
+                health = maxHealth;
+            }
+        }
+    }
+
     // Para asegurar que el texto se actualice al iniciar el juego
     private void Start()
     {
         ActualizarSalud();  // Muestra la salud en la UI al inicio
+    }
+
+    // Actualización por cada frame
+    private void Update()
+    {
+        RegenerarSalud();  // Llama al método de regeneración de salud
+        ActualizarSalud();  // Asegura que la UI de salud se actualice en cada frame
     }
 }
