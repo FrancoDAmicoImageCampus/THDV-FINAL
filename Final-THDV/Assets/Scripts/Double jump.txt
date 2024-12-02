@@ -1,0 +1,5 @@
+Hay que crear el tag "ground" para que funcione y aplicarlo en el suelo.
+
+Hay que desactivar el jump que trae el mini first person controller
+..
+
