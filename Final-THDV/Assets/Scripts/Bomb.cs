@@ -5,6 +5,7 @@ public class Bomb : MonoBehaviour
 {
     public float explosionRadius = 5f;  // Radio de la explosión
     public float explosionForce = 700f; // Fuerza de la explosión
+    public int damage = 20;             // Daño de la explosión
 
     // Start is called before the first frame update
     void Start()
@@ -12,15 +13,15 @@ public class Bomb : MonoBehaviour
         // Hacemos que el objeto sea visible desde el principio
         gameObject.SetActive(true);
 
-        // Llamamos a la corrutina para que el objeto explote y luego desaparezca
+        // Llamamos a la corrutina para que el objeto explote después de 3 segundos
         StartCoroutine(ShowAndExplode());
     }
 
     // Corrutina para manejar la bomba
     IEnumerator ShowAndExplode()
     {
-        // Esperamos 1 segundo antes de hacer la explosión
-        yield return new WaitForSeconds(1f);
+        // Esperamos 3 segundos antes de hacer la explosión
+        yield return new WaitForSeconds(3f); // Cambié el tiempo a 3 segundos
 
         // Creamos la explosión (destrucción de objetos cercanos con el tag "rompible")
         Explode();
@@ -53,6 +54,17 @@ public class Bomb : MonoBehaviour
                 {
                     // Aplicamos una fuerza de explosión hacia afuera desde el centro
                     rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+                }
+            }
+
+            // Si el objeto tiene el tag "Player", aplicar daño
+            if (hitCollider.CompareTag("Player"))
+            {
+                Player player = hitCollider.GetComponent<Player>();
+                if (player != null)
+                {
+                    // Llamamos a la función para que el jugador reciba daño
+                    player.RecibirDanio(damage);
                 }
             }
         }
