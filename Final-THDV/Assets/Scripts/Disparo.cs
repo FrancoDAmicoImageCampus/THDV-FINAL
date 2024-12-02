@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class Disparo : MonoBehaviour
@@ -43,6 +44,9 @@ public class Disparo : MonoBehaviour
             // Instanciar la bala en el punto de disparo
             GameObject bala = Instantiate(balaPrefab, puntoDisparo.position, puntoDisparo.rotation);
 
+            // Asegurarse de que la bala esté activada al instante
+            bala.SetActive(true);
+
             // Aplicar movimiento a la bala
             Rigidbody rb = bala.GetComponent<Rigidbody>();
             if (rb != null)
@@ -55,7 +59,7 @@ public class Disparo : MonoBehaviour
         }
         else
         {
-            Debug.Log("Se alcanzó el límite de balas activas.");
+            
         }
     }
 
