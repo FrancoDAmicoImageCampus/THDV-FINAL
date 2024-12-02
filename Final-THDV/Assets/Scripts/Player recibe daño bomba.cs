@@ -5,6 +5,8 @@ public class Player : MonoBehaviour
 {
     public int health = 100;  // Salud inicial del jugador
     public TextMeshProUGUI healthText;  // Referencia al componente TextMeshProUGUI
+    public float jumpForce = 5f;  // Fuerza del salto del jugador
+    private Rigidbody rb;  // Componente Rigidbody del jugador para aplicar la física del salto
 
     // Método para recibir daño
     public void RecibirDanio(int cantidadDeDanio)
@@ -17,6 +19,9 @@ public class Player : MonoBehaviour
         {
             Muerte();
         }
+
+        // Hacer que el jugador salte al recibir daño
+        Jump();
 
         // Actualizar el texto en pantalla con la salud actual
         ActualizarSalud();
@@ -36,6 +41,21 @@ public class Player : MonoBehaviour
         {
             // Actualiza el texto en el UI con la salud actual
             healthText.text = "Salud: " + health.ToString();
+        }
+    }
+
+    // Método para hacer que el jugador salte
+    private void Jump()
+    {
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody>();  // Obtiene el componente Rigidbody del jugador
+        }
+
+        if (rb != null && Mathf.Approximately(rb.velocity.y, 0f))  // Verifica si el jugador está en el suelo
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);  // Aplica una fuerza hacia arriba
+            Debug.Log("El jugador ha saltado");
         }
     }
 
