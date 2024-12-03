@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0912da94694a4a4c923e6078dd92246, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 50
   explosionRadius: 2
